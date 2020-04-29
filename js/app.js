@@ -21,6 +21,7 @@ $("#btn_validate").click( function () {
 var editor = CodeMirror.fromTextArea(document.getElementById("ta_turtle"), {
     lineNumbers: true,
     mode: 'turtle',
+    viewportMargin: Infinity,
     theme: 'default'
 });
 
