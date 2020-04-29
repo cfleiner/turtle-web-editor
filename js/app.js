@@ -3,7 +3,7 @@ $("#btn_validate").click( function () {
   $("#errors").html("");
   $("#results").html("");
   
-  validate($("#ta_turtle").val(), function (feedback) {
+  validate($(editor.getValue()).val(), function (feedback) {
     $.each(feedback.warnings, function (index, warning) {
       $("#warnings").append($('<li id="warning' + index + '">').text(warning));
     });
