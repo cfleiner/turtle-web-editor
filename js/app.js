@@ -3,7 +3,7 @@ $("#btn_validate").click( function () {
   $("#errors").html("");
   $("#results").html("");
   
-  validate($(editor.getValue()).val(), function (feedback) {
+  validate(editor.getValue(), function (feedback) {
     $.each(feedback.warnings, function (index, warning) {
       $("#warnings").append($('<li id="warning' + index + '">').text(warning));
     });
