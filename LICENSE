@@ -1,6 +1,12 @@
 The MIT License (MIT)
 
-Copyright (c) IDLab - Ghent University - imec
+Copyright (c):
+* N3.js: Ruben Verborgh
+* Bootstrap: Twitter, Inc and The Bootstrap Authors
+* jQuery: JS Foundation and other contributors, https://js.foundation/
+* TurtleValidator: IDLab - Ghent University - imec
+* CodeMirror: Marijn Haverbeke <marijnh@gmail.com> and others
+* Remix: Felix Lohmeier
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
