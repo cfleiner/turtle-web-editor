@@ -1,18 +1,19 @@
 <html>
   <head>
-    <title>Turtle validator</title>
+    <title>Turtle Web Editor</title>
     <script src="js/jquery-2.1.4.min.js"></script>
     <script src="js/ttl.js"></script>
-    <link rel="stylesheet" href="css/style.css">
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <script src="js/codemirror.js"></script>
+    <script src="js/turtle.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/codemirror.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
   </head>
   <body>
     <div class="container">
-      <h1>IDLab Turtle Validator</h1>
-      <p>This is the web version of the NodeJS <a href="https://github.com/mmlab/TurtleValidator">Turtle Validator</a>,
-      which is also available as a command line tool.</p>
-      <h2>Paste your turtle file in here and press validate</h2>
+      <h1>Turtle Web Editor</h1>
+      <p>Online text editor with <a href="https://en.wikipedia.org/wiki/Turtle_(syntax)">Turtle</a> syntax highlighting and validation. This is a remix of <a href="https://github.com/IDLabResearch/TurtleValidator">IDLab Turtle Validator</a> using <a href="https://codemirror.net">Codemirror</a>.
       <form>
         <div class="form-group">
           <textarea class="area" id="ta_turtle"></textarea>
