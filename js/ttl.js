@@ -1,3 +1,17 @@
+function findObjectLine(quad ,lines, currentLine=0) {
+  while (currentLine < lines.length && !lines[currentLine].includes(quad.object.value)) {
+    currentLine++;
+  }
+  return currentLine
+}
+
+function getLineFromError(message) {
+  const words = message.split(" ");
+  // Assumption: All errror messages end with "line [int]."
+  return Number(words[words.length - 1].slice(0, -1) - 1);
+}
+
+
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 var N3 = require('n3');
 
@@ -12,20 +26,28 @@ var validate =  function (turtleStream, callback) {
   };
 
   var feedback = { warnings : [], errors : []};
+  const lines = turtleStream.split('\n');
+  let currentLine = 0;
 
-  parser.parse(turtleStream, function(error, triple, prefixes) {
+  parser.parse(turtleStream, function(error, quad, prefixes) {
     if (error) {
-      feedback.errors.push(error.message);
+      lineIndex = getLineFromError(error.message);
+      if (error.message.includes("punctuation")) {
+        error.message = error.message.replace(String(lineIndex + 1), String(lineIndex));
+        lineIndex--;
+      }
+      feedback.errors.push({"lineIndex": lineIndex, "message": error.message});
     }
-
-    if (triple) {
-      if (triple.object.termType === 'literal') {
-        var value = triple.object.value;
-        var type = triple.object.datatype;
-
+    if (quad) {
+      currentLine = findObjectLine(quad, lines, currentLine);
+      if (quad.object.termType === 'Literal') {
+        var value = quad.object.value;
+        var type = quad.object.datatype.value;
         type = type.replace('http://www.w3.org/2001/XMLSchema#', '');
         if (regexp[type] && !regexp[type].test(value)) {
-          feedback.warnings.push('xsd:', type, 'does not validate for literal. {', triple.subject.value, triple.predicate.value, triple.object.value, '}');
+          feedback.warnings.push({"lineIndex": currentLine + 1,
+            "message": `Value "${value}" does not validate for literal xsd:${type} on line ${currentLine + 1}.`
+          });
         }
       }
     } else {
