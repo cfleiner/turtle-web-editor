@@ -1,41 +1,230 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Turtle Web Editor</title>
+    <title>RDF Turtle Validator</title>
     <script src="js/codemirror.js"></script>
     <link rel="stylesheet" href="css/codemirror.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/codemirror.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
-    <style>
-        .CodeMirror {
-          border: 1px solid #eee;
-          height: 70%;
-        }
-    </style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="css/fontawesome-6.7.2.css"> -->
+
     <script src="js/jquery-3.7.1.min.js"></script>
     <script src="js/ttl.js"></script>
     <script src="js/turtle.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
   </head>
-  <body>
-    <div class="container">
-      <h1>Turtle Web Editor</h1>
-      <p>Online text editor with <a href="https://en.wikipedia.org/wiki/Turtle_(syntax)">Turtle</a> syntax highlighting and validation. This is a remix of <a href="https://github.com/IDLabResearch/TurtleValidator">IDLab Turtle Validator</a> using <a href="https://codemirror.net">Codemirror</a>. The code is <a href="https://github.com/felixlohmeier/turtle-web-editor">on GitHub</a>.
-      <form>
-        <div class="form-group">
-          <textarea class="area" id="ta_turtle"></textarea>
+  <body class="bg-color">
+    <nav class="navbar container navbar-expand-md navbar-dark justify-content-center">
+      <!-- Container wrapper -->
+     <div class="container-fluid mx-auto">
+         <div style="position:absolute; opacity: 50%; padding-left: 0% ;z-index: 1">	
+          	
+          <a href="http://www.w3.org/RDF/" title="RDF Resource Description
+          Framework"> <img border="0" src="http://www.w3.org/RDF/icons/rdf_flyer.48"
+          alt="RDF Resource Description Framework Flyer Icon"/></a>
+          </div>
+          <div style="z-index: 2">
+            <a class="navbar-brand" href="/" style="font-family: Lucida Console;"><span style="color: aquamarine">Turtle</span> Validator</a>
+          </div>
+         
+         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+         <span class="navbar-toggler-icon"></span>
+         </button>
+     
+         <div class="collapse navbar-collapse" id="navbarNav">
+         <ul class="navbar-nav mr-auto">
+
+          <li class="nav-item">
+            <form class="form-inline my-2 my-lg-0 ml-auto"> 
+                <button class="nav-link" type="button" data-bs-toggle="modal" data-bs-target="#aboutModal">About</button>
+            </form>
+          </li>
+
+          <li>
+            <div class="nav-sep">|</div>
+          </li>
+
+       
+          <li class="nav-item">
+              <label class="nav-link">Load Example:</label>
+          </li>   
+          <li class="nav-item">
+          <select id="select-example" class="form-control me-2">
+            <option value="0">Valid</option>
+            <option value="1">Warnings</option>
+            <option value="2">Errors</option>
+            <option value="3">Warn&Err</option>
+          </select>
+          </li>
+
+          <li>
+            <div class="nav-sep">|</div>
+          </li>
+
+          <li class="nav-item">
+              <label class="nav-link">Load State:</label>
+          </li>   
+          <li class="nav-item">
+          <select id="select-state" class="form-control me-2">
+            <option value="0"></option>
+          </select>
+          </li>
+          
+          <li>
+            <div class="nav-sep">|</div>
+          </li>
+
+          <li class="nav-item">
+          <form class="form-inline my-2 my-lg-0 ml-auto"> 
+              <button class="nav-link" type="button" data-bs-toggle="modal" data-bs-target="#exportModal">Export</button>
+          </form>
+          </li>
+         </ul>
+         </div>
+
+         <a target="_blank" href="https://github.com/cfleiner/turtle-web-editor">
+          <i class="fa-brands fa-github"></i>
+        </a>
+     </div>
+     
+    
+   </nav>
+  
+   <div id="wrapper" class="container">
+    <section class="container">
+      <div class="card" hidden>
+        <div  id="result-banner" class="card-body bg-success-subtle">
         </div>
-        <div class="form-group">
-          <input type="button" id="btn_example" class="btn btn-default" value="Load Example"/>
-          <input type="button" id="btn_validate" class="btn btn-default" value="Validate!"/>
-          <input type="button" id="btn_download" class="btn btn-default" value="Download"/>
+      </div>
+
+      <div class="container" style="margin-top: 2%;">
+          <div class="row">
+              <div class="col-7">
+                <div id="editor-container">
+                  <div id="editor">
+                  
+                  </div>
+                  <button id="btn-copy" class="btn btn-outline-primary btn-copy" data-toggle="tooltip" data-placement="top" title="Content copied to clipboard!">
+                    <i class="fas fa-regular fa-copy"></i>
+                  </button>
+                </div>
+
+
+                  <div class="row  mt-2  align-items-between">
+                    <div class="col">
+                      <button id="btn-state" class="btn btn-outline-primary" data-toggle="tooltip" data-placement="top" title="State saved!">Save State</button> 
+                      <div  style="color: gray;">
+                        <p>(CTRL + S)</p>
+                      </div>
+                    </div> 
+
+                    <div class="col text-end">
+                      <button id="btn-validate" class="btn btn-outline-primary">Validate</button> 
+                      <div  style="color: gray;">
+                        <p>(CTRL + ENTER)</p>
+                      </div>
+                    </div> 
+                   
+                  </div>
+
+              </div>
+              
+              <div class="col-5 align-top">
+                  <details open class="align-top border p-3 rounded shadow-sm">
+                      <summary class='text-left h5 mb-0'>Errors <span id="error-count">(0)</span></summary>
+                      <ol id="errors-ol">
+
+                      </ol>
+                  </details>
+
+                  <details open  class="align-top border p-3 rounded shadow-sm">
+                      <summary class='text-left h5 mb-0'>Warnings <span id="warning-count">(0)</span></summary>
+                      <ol id="warnings-ol">
+
+                      </ol>
+                    </details>
+                     
+                  </details>
+                  <details open  class="align-top border p-3 rounded shadow-sm">
+                      <summary class='text-left h5 mb-0'>Information <span id="information-count">(0)</span></summary>
+                      <p>Current version does not provide information items.</p>
+                      <ol id="information-ol">
+
+                      </ol>
+                  </details>
+              </div>
+          </div> 
+
+      
+        <p id="results"></p> 
+      </div>
+         
+        
+      </section>
+   </div>
+
+    <div id="footer-container" class="container">
+      <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+          <div class="col-md-12 d-flex align-items-center">
+          <a href="/" class="mb-3 me-2 mb-md-0 text-muted text-decoration-none lh-1"> 
+            <svg class="bi" width="30" height="24"><use xlink:href="#bootstrap"></use></svg>
+          </a>
+          </div>
+          <div class="col-md-12 d-flex align-items-center">
+          <p style="color: aliceblue;">Modified version by  
+            <a class="footer-a" href="https://be.linkedin.com/in/christian-fleiner-579360ab" target="_blank">Christian Fleiner</a>.</p>
+          </div>
+          <div class="col-md-12 d-flex align-items-center">
+            <p style="color: aliceblue;"> Based on the TurtleValidators of 
+            <a class="footer-a" href="https://github.com/IDLabResearch/TurtleValidator" target="_blank">IDLabResearch</a> and 
+            <a class="footer-a" href="https://github.com/felixlohmeier/turtle-web-editor" target="_blank">Felix Lohmeier</a>
+          </p>
         </div>
-      </form>
-      <ul id="errors"></ul>
-      <ul id="warnings"></ul>
-      <p id="results"></p>
-      <script src="js/app.js"></script>
+    
+      </footer>
     </div>
+
+        <!-- About Modal -->
+        <div class="modal" id="aboutModal" tabindex="-1">
+          <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+              <div class="modal-header">
+              <h1 class="modal-title fs-5">About Turtle Validator</h1>
+              
+              </div>
+              <div class="modal-body">
+                  <p>(will be updated soon)</p>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+              </div>
+          </div>
+          </div>
+      </div> <!-- About Modal END -->
+
+        <!-- Export Modal -->
+        <div class="modal" id="exportModal" tabindex="-1">
+          <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+              <div class="modal-header">
+              <h1 class="modal-title fs-5">Export</h1>
+              
+              </div>
+              <div class="modal-body">
+                  <p>(will be updated soon)</p> 
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Export</button>
+              </div>
+          </div>
+          </div>
+      </div> <!-- Export Modal END -->
+
+    <script src="js/examples.js"></script>
+    <script src="js/app.js"></script>
+
   </body>
 </html>

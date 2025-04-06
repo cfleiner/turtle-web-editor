@@ -32,19 +32,20 @@ var validate =  function (turtleStream, callback) {
   parser.parse(turtleStream, function(error, quad, prefixes) {
     if (error) {
       lineIndex = getLineFromError(error.message);
-      if (error.message.includes("punctuation")) {
+      if (error.message.includes("punctuation") && lineIndex < lines.length) {
         error.message = error.message.replace(String(lineIndex + 1), String(lineIndex));
-        lineIndex--;
+        lineIndex= Math.min(lineIndex - 2, lines.length);
       }
       feedback.errors.push({"lineIndex": lineIndex, "message": error.message});
     }
     if (quad) {
-      currentLine = findObjectLine(quad, lines, currentLine);
+      // currentLine = findObjectLine(quad, lines, currentLine);
       if (quad.object.termType === 'Literal') {
         var value = quad.object.value;
         var type = quad.object.datatype.value;
         type = type.replace('http://www.w3.org/2001/XMLSchema#', '');
         if (regexp[type] && !regexp[type].test(value)) {
+          currentLine = findObjectLine(quad, lines, currentLine);
           feedback.warnings.push({"lineIndex": currentLine + 1,
             "message": `Value "${value}" does not validate for literal xsd:${type} on line ${currentLine + 1}.`
           });

@@ -1,3 +1,88 @@
+.bg-color {
+    background-color: rgb(218, 218, 218);
+  }
+
+nav.navbar {
+    background-color: #116E8A;
+    border: 1px solid #747474;
+    border-radius: 10px;
+    margin-bottom: 5px;
+    box-shadow: 5px 3px 5px rgb(255, 255, 255);
+
+  }
+
+.nav-sep {
+    color: white;
+    font-size: 25px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+label.nav-link, button.nav-link{
+    color: white;
+  }
+
+.fa-github {
+    margin-top: 7px;
+    font-size: 25px; /* Adjust size as needed */
+    color: #ffffff;
+}
+
+
+
+
+.btn.btn-outline-primary {
+  background-color: transparent;
+  color: #116E8A;
+  border: 1px solid #116E8A;
+  border-radius: 5%;
+  }
+  
+.btn.btn-outline-primary:hover {
+  background-color: #116E8A;
+  color: white;
+  border: 1px solid white;
+}
+
+
+#wrapper {
+  background-color: white;
+  border: 1px solid #747474;
+  border-radius: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  box-shadow: 7px 3px 5px darkgray;
+}
+
+#footer-container {
+  background-color: #116E8A;
+  border: 1px solid #747474;
+  border-radius: 10px;
+  margin-top: 5px;
+  box-shadow: 5px 3px 5px darkgray;
+
+}
+
+.footer-a {
+    color: aquamarine;
+    text-decoration: none;
+}
+
+#editor-container {
+  position: relative;
+  border: 1px solid rgb(215, 214, 214);
+}
+
+#editor {
+  width: 100%;
+  height: 100%;
+}
+
+/* .CodeMirror {
+    border: 1px solid #eee;
+    height: 70%;
+  } */
+
 .highlight-warning {
     background-color: rgba(255, 255, 0, 0.3);
 }
@@ -5,3 +90,28 @@
 .highlight-error {
     background-color: rgba(255, 0, 0, 0.3);
 }
+
+.btn-copy {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    opacity: 0.05; 
+    transition: opacity 0.9s ease;
+  }
+  
+  .btn-copy:hover {
+    background-color: #537782;
+    color: white;
+  }
+
+
+ .tooltip-inner {
+    background-color: white; 
+    color: #537782; 
+    border: 1px solid #537782;
+  }
+  
+
