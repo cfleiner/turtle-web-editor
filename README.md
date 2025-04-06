@@ -13,4 +13,4 @@ The modified version contains the following changes:
 - Editor state saving. The states are lost when reloading the page.
 - A prettier interface (my subjective opinion of course).
 
-See the [Online Demo](cfleiner.github.io/turtle-web-editor/)
+See the [Online Demo](https://cfleiner.github.io/turtle-web-editor/)
