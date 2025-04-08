@@ -10,9 +10,6 @@
     <link rel="stylesheet" href="css/codemirror.css">
     <link rel="stylesheet" href="css/style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
-    <!-- <link rel="stylesheet" href="css/fontawesome-6.7.2.css"> -->
-
-
 
     <script src="js/bootstrap.bundle.min.js"></script>
 
@@ -84,7 +81,7 @@
 
           <li class="nav-item">
           <form class="form-inline my-2 my-lg-0 ml-auto"> 
-              <button class="nav-link" type="button" data-bs-toggle="modal" data-bs-target="#exportModal">Export</button>
+              <button id="btn-graphViz" class="nav-link" type="button" data-bs-toggle="modal" data-bs-target="#graphVizModal">GraphViz</button>
           </form>
           </li>
          </ul>
@@ -118,11 +115,20 @@
                 </div> <!-- row editor-container -->
                 <div class="row  mt-2  align-items-between">
                   <div class="col">
-                    <button id="btn-state" class="btn btn-outline-primary" data-toggle="tooltip" data-placement="top" title="State saved!">Save State</button> 
-                      <div  style="color: gray;">
-                        <p>(CTRL + S)</p>
+                    <div class="row">
+                      <div class="col">
+                        <button id="btn-state" class="btn btn-outline-primary" data-toggle="tooltip" data-placement="top" title="State saved!">Save State</button> 
+                        <div  style="color: gray;">
+                          <p>(CTRL + S)</p>
+                        </div>
+                      </div>
+                      <div class="col">
+                        <button id="btn-ttl-download" class="btn btn-outline-primary">Download</button>
                       </div>
                   </div> 
+                </div>
+
+                  
 
                   <div class="col text-end">
                     <button id="btn-validate" class="btn btn-outline-primary">Validate</button> 
@@ -201,7 +207,21 @@
             
             </div>
             <div class="modal-body">
-                <p>(will be updated soon)</p>
+                <p>Turtle Validator is an online editor for RDF Turtle notation. It provides the following features:
+                  <ul>
+                    <li>Syntax highlighting</li>
+                    <li>Syntax validation with line identification</li>
+                    <li>Temporary state savings</li>
+                    <li>Tabular overview of RDF quads/triples</li>
+                    <li>Creation of RDF diagrams</li>
+                  </ul>
+                </p>
+
+                <p>The application can be locally hosted via <a target="_blank" href="https://marketplace.visualstudio.com/items/?itemName=ritwickdey.LiveServer">Live server</a> or similar.
+                  If you run into any issues or want to request additional features, <a target="_blank" href="https://github.com/cfleiner/turtle-web-editor/issues">open an issue on GitHub</a>.
+                </p>
+
+                <p><i>Remark: The editor is primarily made for fast-checking Turtle files. States are only temporarily saved and lost when the page is relaoded.</i></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
@@ -210,27 +230,31 @@
         </div>
     </div> <!-- About Modal END -->
 
-      <!-- Export Modal -->
-      <div class="modal" id="exportModal" tabindex="-1">
+      <!-- GraphViz Modal -->
+      <div class="modal" id="graphVizModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-            <h1 class="modal-title fs-5">Export</h1>
+            <h1 class="modal-title fs-5">GraphViz (generated with Viz.js v2.1.2)</h1>
             
             </div>
             <div class="modal-body">
-                <p>(will be updated soon)</p> 
+              <div class="overflow-auto" style="width: 100%; max-height: 600px;">
+
+                <div id="svgContainer"></div>
+              </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Export</button>
+                <button id="btn-graphViz-download" type="button" class="btn btn-outline-primary">Download</button>
             </div>
         </div>
         </div>
-    </div> <!-- Export Modal END -->
+    </div> <!-- GraphViz Modal END -->
 
   <script src="js/examples.js"></script>
   <script src="js/app.js"></script>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/viz.js/2.1.2/viz.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/viz.js/2.1.2/full.render.js"></script>
   </body>
 </html>

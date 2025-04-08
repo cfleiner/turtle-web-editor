@@ -164,3 +164,12 @@ label.nav-link, button.nav-link{
     outline: none;
   }
 
+  .svg-container {
+    width: 100%;
+    height: auto;
+  }
+  .svg-container svg {
+    width: 100%;
+    height: auto;
+  }
+

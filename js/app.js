@@ -20,6 +20,25 @@ $(document).ready(function() {
 
 
   $('#btn-validate').on('click', performValidation);
+  $('#btn-graphViz').on('click', generateDot);
+
+  $('#btn-graphViz-download').on('click', function() {
+    let svgElement = $('#svgContainer').children().first()[0];
+    if (svgElement && svgElement.nodeName === 'svg') {
+      let serializer = new XMLSerializer();
+      let svgString = serializer.serializeToString(svgElement);
+      downloadFile(svgString, `turtleValidatorGraph_${getTimeString()}.svg`, 'image/svg+xml;charset=utf-8');
+    } else {
+      console.error(svgElement, 'The selected element is not an SVG node.');
+    }
+  });
+
+  $('#btn-ttl-download').on('click', function() {
+    const editor = document.querySelector('#editor .CodeMirror').CodeMirror;  
+    let content = editor.getValue();
+    downloadFile(content, `turtleValidator_${getTimeString()}.ttl`, 'text/turtle;charset=utf-8');
+  });
+
 
   $('#btn-state').on('click', () => {
     let timeString = getTimeString();
@@ -284,6 +303,62 @@ function updateTable(data) {
   const indexedData = data.map((row, index) => [index + 1, ...row]);
   t.rows.add(indexedData);
   t.draw();
+}
+
+
+function generateDot() {
+  let blankPattern = new RegExp('^b[0-9]+_');
+  let data = $('#data-table').DataTable().rows().data().toArray();
+  let markup = ['digraph {']
+  let nodeObj = {};
+  let s;
+  let p;
+  let o;
+
+  for (let i = 0; i < data.length; i++) {
+    s = data[i][2];
+    p = data[i][3];
+    o = data[i][4];
+
+    if (!nodeObj.hasOwnProperty(s)) {
+      nodeObj[s] = Object.keys(nodeObj).length
+      markup.push(`${nodeObj[s]} [shape="ellipse" label="${s}"];`)
+
+    }
+
+    if (!nodeObj.hasOwnProperty(o)) {
+      nodeObj[o] = Object.keys(nodeObj).length
+      let shape = (o.startsWith('http') || blankPattern.test(o)) ? 'ellipse' : 'rectangle';
+      markup.push(`${nodeObj[o]} [shape="${shape}" label="${o}"];`)
+    }
+    markup.push(`${nodeObj[s]} -> ${nodeObj[o]} [label="${p}"];`)
+  }
+  markup.push('}')
+
+  var dot = markup.join('\n');
+  // Generate SVG using Viz.js
+  var viz = new Viz();
+  viz.renderSVGElement(dot)
+    .then(function(element) {
+      $('#svgContainer').html('');
+      $('#svgContainer').append(element);
+    })
+    .catch(error => {
+      console.error(error);
+    });
+
+}
+
+function downloadFile(content, fileName, mimeType) {
+  let blob = new Blob([content], { type: mimeType });
+  let url = URL.createObjectURL(blob);
+  let link = $('<a></a>')
+    .attr('href', url)
+    .attr('download', fileName)
+    .appendTo('body');
+  link[0].click();
+  link.remove();
+  URL.revokeObjectURL(url);
 }
 
 

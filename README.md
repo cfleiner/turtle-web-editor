@@ -11,6 +11,8 @@ The modified version contains the following changes:
 - Continous error catching. In case of an error, the validation check is continued after the next dot.
 - Line number identification and line highlighting.
 - Editor state saving. The states are lost when reloading the page.
+- Tabular overview of RDF quads/triples
+- Creation of RDF diagrams using Viz.js
 - A prettier interface (my subjective opinion of course).
 
 See the [Online Demo](https://cfleiner.github.io/turtle-web-editor/)
