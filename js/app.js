@@ -1,9 +1,12 @@
+var tableRows = [];
+
+
 $(document).ready(function() {
   $(document).on("keydown", addKey);
   $(document).on("keyup", removeKey);
 
   initalizeCodeMirror();
-
+  initTable();
 
 
   $('#select-example').on('change', function(e) {
@@ -78,12 +81,13 @@ function performValidation() {
   const prefixPattern = /(^ *@.*\.$)|(^ *prefix.*$)/gmi;
   const prefixes = content.match(prefixPattern).join('\n') + '\n';
   let offset = 0;
-
+  tableRows = [];
   chainValidation(content, prefixes, offset);
 
 };
 
-function chainValidation(content, prefixes, offset) { 
+
+function chainValidation(content, prefixes, offset) {
   validate(content, function (feedback) {
     $.each(feedback.warnings, function (index, warning) {
         highlightLine(warning.lineIndex + offset - 1, "highlight-warning");
@@ -98,11 +102,15 @@ function chainValidation(content, prefixes, offset) {
       rem = getRemaining(content, prefixes, error.lineIndex);
       content = rem.content;
       offset += rem.lineIndex;
-      chainValidation(content, prefixes, offset)
+      chainValidation(content, prefixes, offset);
     });
 
+    tableRows = tableRows.concat(feedback.tableRows);
+
     updateResult();
+    updateTable(tableRows);
   });
+
 
 
 function updateResult() {
@@ -255,4 +263,27 @@ function restoreState(timeString) {
   const editor = document.querySelector('#editor .CodeMirror').CodeMirror;
   editor.setValue(states[timeString]);
 }
+
+
+function initTable() {
+  new DataTable('#data-table', {
+    scrollX: true,
+    columns: [
+        { title: '#' },
+        { title: 'Graph' },
+        { title: 'Subject' },
+        { title: 'Predicate' },
+        { title: 'Object' }
+    ]
+  });
+}
+
+function updateTable(data) {
+  const t = $('#data-table').DataTable();
+  t.clear();
+  const indexedData = data.map((row, index) => [index + 1, ...row]);
+  t.rows.add(indexedData);
+  t.draw();
+}
+
 

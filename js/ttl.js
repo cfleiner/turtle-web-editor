@@ -1,6 +1,8 @@
 function findObjectLine(quad ,lines, currentLine=0) {
+  
   while (currentLine < lines.length && !lines[currentLine].includes(quad.object.value)) {
     currentLine++;
+    
   }
   return currentLine
 }
@@ -25,9 +27,10 @@ var validate =  function (turtleStream, callback) {
     'int' : /^[-+]?(0|[1-9]\d*)$/
   };
 
-  var feedback = { warnings : [], errors : []};
+  var feedback = { warnings : [], errors : [], tableRows: []};
   const lines = turtleStream.split('\n');
   let currentLine = 0;
+  let lineIndex = 0
 
   parser.parse(turtleStream, function(error, quad, prefixes) {
     if (error) {
@@ -39,7 +42,7 @@ var validate =  function (turtleStream, callback) {
       feedback.errors.push({"lineIndex": lineIndex, "message": error.message});
     }
     if (quad) {
-      // currentLine = findObjectLine(quad, lines, currentLine);
+      feedback.tableRows.push([quad.graph.value, quad.subject.value, quad.predicate.value, quad.object.value])
       if (quad.object.termType === 'Literal') {
         var value = quad.object.value;
         var type = quad.object.datatype.value;

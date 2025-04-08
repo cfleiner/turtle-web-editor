@@ -2,6 +2,13 @@
     background-color: rgb(218, 218, 218);
   }
 
+h3 {
+  background-color: #116E8A;
+  color: aliceblue;
+  border-radius: 10px;
+  padding-left: 1%;
+}
+
 nav.navbar {
     background-color: #116E8A;
     border: 1px solid #747474;
@@ -62,7 +69,7 @@ label.nav-link, button.nav-link{
 }
 
 
-#wrapper {
+.wrapper {
   background-color: white;
   border: 1px solid #747474;
   border-radius: 10px;
@@ -138,4 +145,22 @@ label.nav-link, button.nav-link{
     border: 1px solid #537782;
   }
   
+  .dt-paging-button.page-item > .page-link {
+    color: #116E8A;
+  }
+  
+  .dt-paging-button.page-item.active > .page-link {
+    background-color: #116E8A;
+    border-color: #116E8A;
+    color: white;
+  }
+
+  .dt-paging-button.page-item.active > .page-link:focus {
+    box-shadow: 0 0 10px aquamarine;
+  }
+  
+  .dt-paging-button.page-item > a:focus {
+    box-shadow: 0 0 10px 2px #537782; 
+    outline: none;
+  }
 
