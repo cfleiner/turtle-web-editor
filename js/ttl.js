@@ -8,7 +8,7 @@ function findObjectLine(quad ,lines, currentLine=0) {
 function getLineFromError(message) {
   const words = message.split(" ");
   // Assumption: All errror messages end with "line [int]."
-  return Number(words[words.length - 1].slice(0, -1) - 1);
+  return Number(words[words.length - 1].slice(0, -1));
 }
 
 
@@ -31,10 +31,10 @@ var validate =  function (turtleStream, callback) {
 
   parser.parse(turtleStream, function(error, quad, prefixes) {
     if (error) {
-      lineIndex = getLineFromError(error.message);
+      lineIndex = getLineFromError(error.message) - 1;
       if (error.message.includes("punctuation") && lineIndex < lines.length) {
         error.message = error.message.replace(String(lineIndex + 1), String(lineIndex));
-        lineIndex= Math.min(lineIndex - 2, lines.length);
+        lineIndex= Math.min(lineIndex - 1, lines.length);
       }
       feedback.errors.push({"lineIndex": lineIndex, "message": error.message});
     }

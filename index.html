@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html>
-  <head>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RDF Turtle Validator</title>
     <script src="js/codemirror.js"></script>
     <link rel="stylesheet" href="css/codemirror.css">
-    <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/codemirror.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
     <!-- <link rel="stylesheet" href="css/fontawesome-6.7.2.css"> -->
 
@@ -19,10 +21,10 @@
     <nav class="navbar container navbar-expand-md navbar-dark justify-content-center">
       <!-- Container wrapper -->
      <div class="container-fluid mx-auto">
-         <div style="position:absolute; opacity: 50%; padding-left: 0% ;z-index: 1">	
+         <div style="position:absolute; top: 6px ; opacity: 50%; padding-left: 0% ;z-index: 1">	
           	
-          <a href="http://www.w3.org/RDF/" title="RDF Resource Description
-          Framework"> <img border="0" src="http://www.w3.org/RDF/icons/rdf_flyer.48"
+          <a href="/turtle-web-editor/" title="RDF Resource Description
+          Framework"> <img border="0" src="https://www.w3.org/RDF/icons/rdf_flyer.48"
           alt="RDF Resource Description Framework Flyer Icon"/></a>
           </div>
           <div style="z-index: 2">
@@ -43,7 +45,7 @@
           </li>
 
           <li>
-            <div class="nav-sep">|</div>
+            <div class="nav-sep d-none d-md-block">|</div>
           </li>
 
        
@@ -60,7 +62,7 @@
           </li>
 
           <li>
-            <div class="nav-sep">|</div>
+            <div class="nav-sep d-none d-md-block">|</div>
           </li>
 
           <li class="nav-item">
@@ -73,7 +75,7 @@
           </li>
           
           <li>
-            <div class="nav-sep">|</div>
+            <div class="nav-sep d-none d-md-block">|</div>
           </li>
 
           <li class="nav-item">
@@ -93,7 +95,7 @@
    </nav>
   
    <div id="wrapper" class="container">
-    <section class="container">
+    <section class="container" style="height: 100%;">
       <div class="card" hidden>
         <div  id="result-banner" class="card-body bg-success-subtle">
         </div>
@@ -101,130 +103,124 @@
 
       <div class="container" style="margin-top: 2%;">
           <div class="row">
-              <div class="col-7">
-                <div id="editor-container">
-                  <div id="editor">
-                  
+              <div class="col col-md-7">
+                <div class="row">
+                  <div id="editor-container">
+                    <div id="editor"></div>
+                    <button id="btn-copy" class="btn btn-outline-primary btn-copy" data-toggle="tooltip" data-placement="top" title="Content copied to clipboard!">
+                      <i class="fas fa-regular fa-copy"></i>
+                    </button>
                   </div>
-                  <button id="btn-copy" class="btn btn-outline-primary btn-copy" data-toggle="tooltip" data-placement="top" title="Content copied to clipboard!">
-                    <i class="fas fa-regular fa-copy"></i>
-                  </button>
-                </div>
-
-
-                  <div class="row  mt-2  align-items-between">
-                    <div class="col">
-                      <button id="btn-state" class="btn btn-outline-primary" data-toggle="tooltip" data-placement="top" title="State saved!">Save State</button> 
+                </div> <!-- row editor-container -->
+                <div class="row  mt-2  align-items-between">
+                  <div class="col">
+                    <button id="btn-state" class="btn btn-outline-primary" data-toggle="tooltip" data-placement="top" title="State saved!">Save State</button> 
                       <div  style="color: gray;">
                         <p>(CTRL + S)</p>
                       </div>
-                    </div> 
+                  </div> 
 
-                    <div class="col text-end">
-                      <button id="btn-validate" class="btn btn-outline-primary">Validate</button> 
+                  <div class="col text-end">
+                    <button id="btn-validate" class="btn btn-outline-primary">Validate</button> 
                       <div  style="color: gray;">
                         <p>(CTRL + ENTER)</p>
                       </div>
-                    </div> 
+                  </div> 
                    
-                  </div>
-
-              </div>
+                </div> <!-- row validate buttons -->
+              </div> <!-- col editor-container -->
               
-              <div class="col-5 align-top">
+              <div class="col  col-md-5  align-top">
+                <div class="row">
                   <details open class="align-top border p-3 rounded shadow-sm">
                       <summary class='text-left h5 mb-0'>Errors <span id="error-count">(0)</span></summary>
                       <ol id="errors-ol">
 
                       </ol>
                   </details>
-
+                </div> <!-- error box -->
+                <div class="row">
                   <details open  class="align-top border p-3 rounded shadow-sm">
                       <summary class='text-left h5 mb-0'>Warnings <span id="warning-count">(0)</span></summary>
                       <ol id="warnings-ol">
 
                       </ol>
-                    </details>
-                     
                   </details>
+                </div> <!-- warning box -->
+                <div class="row">
                   <details open  class="align-top border p-3 rounded shadow-sm">
-                      <summary class='text-left h5 mb-0'>Information <span id="information-count">(0)</span></summary>
+                    <summary class='text-left h5 mb-0'>Information <span id="information-count">(0)</span></summary>
                       <p>Current version does not provide information items.</p>
                       <ol id="information-ol">
 
                       </ol>
                   </details>
-              </div>
-          </div> 
+                </div> <!-- info box -->
+              </div> <!-- col boxes -->
+              
+            </div> <!-- row editor+boxes -->
 
-      
-        <p id="results"></p> 
-      </div>
-         
-        
-      </section>
+          </div> <!-- container editor+boxes -->
+    </section>
    </div>
-
-    <div id="footer-container" class="container">
-      <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
-          <div class="col-md-12 d-flex align-items-center">
-          <a href="/" class="mb-3 me-2 mb-md-0 text-muted text-decoration-none lh-1"> 
-            <svg class="bi" width="30" height="24"><use xlink:href="#bootstrap"></use></svg>
+ 
+   <div id="footer-container" class="container">
+    <footer class="d-flex flex-wrap justify-content-between align-items-center  mt-4 border-top">
+        <p style="color: aliceblue;">
+          Modified version by  
+          <a class="footer-a" href="https://github.com/cfleiner/" target="_blank">
+            Christian Fleiner
           </a>
-          </div>
-          <div class="col-md-12 d-flex align-items-center">
-          <p style="color: aliceblue;">Modified version by  
-            <a class="footer-a" href="https://be.linkedin.com/in/christian-fleiner-579360ab" target="_blank">Christian Fleiner</a>.</p>
-          </div>
-          <div class="col-md-12 d-flex align-items-center">
-            <p style="color: aliceblue;"> Based on the TurtleValidators of 
-            <a class="footer-a" href="https://github.com/IDLabResearch/TurtleValidator" target="_blank">IDLabResearch</a> and 
-            <a class="footer-a" href="https://github.com/felixlohmeier/turtle-web-editor" target="_blank">Felix Lohmeier</a>
-          </p>
+          <br>
+          Based on the TurtleValidators of 
+          <a class="footer-a" href="https://github.com/IDLabResearch/TurtleValidator" target="_blank">
+            IDLabResearch
+          </a> and 
+          <a class="footer-a" href="https://github.com/felixlohmeier/turtle-web-editor" target="_blank">
+            Felix Lohmeier
+          </a>
+        </p>
+    </footer>
+  </div>
+    <!-- About Modal -->
+    <div class="modal" id="aboutModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h1 class="modal-title fs-5">About Turtle Validator</h1>
+            
+            </div>
+            <div class="modal-body">
+                <p>(will be updated soon)</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
         </div>
-    
-      </footer>
-    </div>
+        </div>
+    </div> <!-- About Modal END -->
 
-        <!-- About Modal -->
-        <div class="modal" id="aboutModal" tabindex="-1">
-          <div class="modal-dialog modal-lg">
-          <div class="modal-content">
-              <div class="modal-header">
-              <h1 class="modal-title fs-5">About Turtle Validator</h1>
-              
-              </div>
-              <div class="modal-body">
-                  <p>(will be updated soon)</p>
-              </div>
-              <div class="modal-footer">
-                  <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-              </div>
-          </div>
-          </div>
-      </div> <!-- About Modal END -->
+      <!-- Export Modal -->
+      <div class="modal" id="exportModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h1 class="modal-title fs-5">Export</h1>
+            
+            </div>
+            <div class="modal-body">
+                <p>(will be updated soon)</p> 
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Export</button>
+            </div>
+        </div>
+        </div>
+    </div> <!-- Export Modal END -->
 
-        <!-- Export Modal -->
-        <div class="modal" id="exportModal" tabindex="-1">
-          <div class="modal-dialog modal-lg">
-          <div class="modal-content">
-              <div class="modal-header">
-              <h1 class="modal-title fs-5">Export</h1>
-              
-              </div>
-              <div class="modal-body">
-                  <p>(will be updated soon)</p> 
-              </div>
-              <div class="modal-footer">
-                  <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Export</button>
-              </div>
-          </div>
-          </div>
-      </div> <!-- Export Modal END -->
-
-    <script src="js/examples.js"></script>
-    <script src="js/app.js"></script>
+  <script src="js/examples.js"></script>
+  <script src="js/app.js"></script>
 
   </body>
 </html>

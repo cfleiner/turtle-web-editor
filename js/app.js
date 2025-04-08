@@ -34,11 +34,6 @@ $(document).ready(function() {
   });
 
 
-  // $('.btn-check').on("click", hideAndShow);
-  // $('#btn-execute').on('click', execute);
-
-
-
   $('#editor-container').on('mouseenter', () => $('#btn-copy').css('opacity', '1'))
   $('#editor-container').on('mouseleave', () => $('#btn-copy').css('opacity', '0.05')) 
   $('#btn-copy').on('click', copyCodeToClipboard)
@@ -97,9 +92,8 @@ function chainValidation(content, prefixes, offset) {
     });
     
     $.each(feedback.errors, function (index, error) {
-
       highlightLine(error.lineIndex + offset, "highlight-error");
-      error.message = error.message.replace(String(lineIndex + 1), String(lineIndex + offset + 1));
+      error.message = error.message.replace(String(getLineFromError(error.message)), String(error.lineIndex + offset + 1));
       $("#errors-ol").append($('<li>').text(error.message));
       rem = getRemaining(content, prefixes, error.lineIndex);
       content = rem.content;
@@ -134,7 +128,7 @@ function updateResult() {
   });
 
   $("#result-banner").parent().removeAttr("hidden");
-  $("#result-banner").text(t);
+  $("#result-banner").text(`${t} (Last updated: ${getTimeString()})`);
   $("#result-banner").addClass(c);
 }
 }
@@ -157,6 +151,8 @@ function highlightLine(lineIndex, highlightClass) {
 function initalizeCodeMirror(theme='default') {
   const cm = CodeMirror(document.querySelector('#editor'), {
       lineNumbers: true,
+      // lineWrapping:true,
+      viewportMargin: Infinity,
       tabSize: 2,
       mode: 'turtle',    
       theme: theme
@@ -165,12 +161,7 @@ function initalizeCodeMirror(theme='default') {
   cm.setCursor(cm.lineCount(), 0);
 }
 
-// CodeMirror.fromTextArea(document.getElementById("ta_turtle"), {
-//     lineNumbers: true,
-//     mode: 'turtle',
-//     viewportMargin: Infinity,
-//     theme: 'default'
-// });
+
 
 
 // $("#btn_download").click( function () {
